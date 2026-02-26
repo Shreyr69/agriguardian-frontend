@@ -293,6 +293,10 @@ const resources = {
         loginDesc: "Login to access your farming dashboard",
         registerDesc: "Join thousands of farmers using smart pest management",
         location: "Location (District, State)",
+        termsText: "By continuing, you agree to our",
+        termsOfService: "Terms of Service",
+        and: "and",
+        privacyPolicy: "Privacy Policy",
       },
       // Dashboard
       dashboard: {
@@ -781,6 +785,10 @@ const resources = {
         registerDesc:
           "स्मार्ट कीट प्रबंधन का उपयोग करने वाले हजारों किसानों से जुड़ें",
         location: "स्थान (जिला, राज्य)",
+        termsText: "जारी रखकर, आप हमारी",
+        termsOfService: "सेवा की शर्तें",
+        and: "और",
+        privacyPolicy: "गोपनीयता नीति",
       },
       // Dashboard
       dashboard: {

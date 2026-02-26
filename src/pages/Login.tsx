@@ -305,10 +305,10 @@ const Login = () => {
             className="mt-8 pt-8 border-t border-gray-200"
           >
             <p className="text-center text-sm text-gray-500">
-              By continuing, you agree to our{" "}
-              <a href="#" className="text-[#0B0B0B] hover:underline">Terms of Service</a>
-              {" "}and{" "}
-              <a href="#" className="text-[#0B0B0B] hover:underline">Privacy Policy</a>.
+              {t('auth.termsText')}{" "}
+              <a href="#" className="text-[#0B0B0B] hover:underline">{t('auth.termsOfService')}</a>
+              {" "}{t('auth.and')}{" "}
+              <a href="#" className="text-[#0B0B0B] hover:underline">{t('auth.privacyPolicy')}</a>.
             </p>
           </motion.div>
         </div>
