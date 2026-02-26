@@ -317,13 +317,6 @@ const Index = () => {
               >
                 {t('landing.nav.howItWorks')}
               </motion.a>
-              <motion.a
-                href="#team"
-                className="text-sm font-medium text-white hover:text-[#FFD24A] transition-colors"
-                whileHover={{ y: -2 }}
-              >
-                {t('landing.nav.team')}
-              </motion.a>
               <Link to="/contact" className="text-sm font-medium text-white hover:text-[#FFD24A] transition-colors">
                 {t('landing.nav.contact')}
 
@@ -809,59 +802,6 @@ const Index = () => {
         </div >
       </section >
 
-      {/* Team Section */}
-      < section id="team" className="py-24 bg-white" >
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <span className="w-2 h-2 rounded-full bg-[#FFD24A]"></span>
-              <span className="text-sm font-medium text-gray-600">{t('landing.team.label')}</span>
-            </div>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mb-4 text-[#0B0B0B]">
-              {t('landing.team.title')}
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              {t('landing.team.description')}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.15 }}
-                whileHover={{ y: -8 }}
-                className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
-              >
-                <div className="aspect-square overflow-hidden">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="font-display text-xl font-bold text-[#0B0B0B] mb-1">{member.name}</h3>
-                  <p className="text-[#B9F261] font-medium text-sm mb-3">{member.role}</p>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">{member.bio}</p>
-                  <div className="flex gap-3">
-                    <a href={member.linkedin} className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-[#B9F261] hover:text-[#0B0B0B] transition-colors">
-                      <Linkedin className="w-4 h-4" />
-                    </a>
-                    <a href={member.twitter} className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-[#B9F261] hover:text-[#0B0B0B] transition-colors">
-                      <Twitter className="w-4 h-4" />
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section >
-
       {/* Testimonials Section */}
       < section className="py-24 bg-[#FAF4EA]" >
         <div className="container mx-auto px-6">
@@ -1030,7 +970,6 @@ const Index = () => {
                 <li><a href="#about" className="text-white/60 hover:text-[#B9F261] transition-colors flex items-center gap-2"><ChevronRight className="w-3 h-3" />{t('landing.footer.aboutUs')}</a></li>
                 <li><a href="#features" className="text-white/60 hover:text-[#B9F261] transition-colors flex items-center gap-2"><ChevronRight className="w-3 h-3" />{t('landing.nav.features')}</a></li>
                 <li><a href="#how-it-works" className="text-white/60 hover:text-[#B9F261] transition-colors flex items-center gap-2"><ChevronRight className="w-3 h-3" />{t('landing.nav.howItWorks')}</a></li>
-                <li><a href="#team" className="text-white/60 hover:text-[#B9F261] transition-colors flex items-center gap-2"><ChevronRight className="w-3 h-3" />{t('landing.nav.team')}</a></li>
                 <li><Link to="/contact" className="text-white/60 hover:text-[#B9F261] transition-colors flex items-center gap-2"><ChevronRight className="w-3 h-3" />{t('landing.nav.contact')}</Link></li>
               </ul>
             </div>
