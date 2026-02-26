@@ -247,7 +247,7 @@ export const identifyPestImage = async (imageBase64: string) => {
 };
 
 export const checkSymptoms = async (symptoms: any) => {
-  const response = await api.post("/api/ai/check-symptoms", symptoms);
+  const response = await api.post("/api/ai/symptom-check", symptoms);
   return response.data;
 };
 
