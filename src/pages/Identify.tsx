@@ -281,13 +281,17 @@ const Identify = () => {
     return pests.filter(
       (pest) =>
         (!selectedCrop || pest.crop === selectedCrop) &&
-        selectedSymptoms.some((s) =>
-          pest.symptoms.some((ps) =>
-            ps.toLowerCase().includes(
-              symptomOptions.find((so) => so.id === s)?.label.toLowerCase() || ""
-            )
-          )
-        )
+        selectedSymptoms.some((s) => {
+          const keyword = s.toLowerCase();
+          let terms = [keyword];
+          if (keyword === 'sticky') terms = ['sticky', 'honeydew', 'mold'];
+          if (keyword === 'insects') terms = ['insect', 'bug', 'aphid', 'fly', 'beetle', 'worm', 'caterpillar', 'moth'];
+          if (keyword === 'holes') terms = ['hole', 'chew', 'bite', 'damage', 'cut'];
+          
+          return pest.symptoms.some((ps) => 
+            terms.some(term => ps.toLowerCase().includes(term))
+          );
+        })
     );
   };
 
@@ -616,34 +620,32 @@ const Identify = () => {
                   {getWizardResults().length > 0 ? (
                     getWizardResults().map((pest) => (
                       <motion.div key={pest.id} variants={scaleIn}>
-                        <Link to={`/pests/${pest.id}`}>
-                          <motion.div
-                            whileHover={{ y: -5, scale: 1.01 }}
-                            className="bg-white rounded-2xl p-5 border border-gray-200 hover:border-[#B9F261] hover:shadow-lg transition-all"
-                          >
-                            <div className="flex items-start justify-between">
-                              <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#B9F261] to-[#FFD24A] flex items-center justify-center">
-                                  <Bug className="w-6 h-6 text-[#0B0B0B]" />
-                                </div>
-                                <div>
-                                  <h3 className="font-display font-bold text-lg text-[#0B0B0B]">{pest.name}</h3>
-                                  <p className="text-sm text-gray-500 mb-2">{pest.crop}</p>
-                                  <div className="flex flex-wrap gap-2">
-                                    {pest.symptoms.slice(0, 3).map((symptom, idx) => (
-                                      <Badge key={`${symptom}-${idx}`} className="bg-gray-100 text-gray-700 text-xs">
-                                        {symptom}
-                                      </Badge>
-                                    ))}
-                                  </div>
+                        <motion.div
+                          whileHover={{ y: -5, scale: 1.01 }}
+                          className="bg-white rounded-2xl p-5 border border-gray-200 hover:border-[#B9F261] hover:shadow-lg transition-all"
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-start gap-4">
+                              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#B9F261] to-[#FFD24A] flex items-center justify-center">
+                                <Bug className="w-6 h-6 text-[#0B0B0B]" />
+                              </div>
+                              <div>
+                                <h3 className="font-display font-bold text-lg text-[#0B0B0B]">{pest.name}</h3>
+                                <p className="text-sm text-gray-500 mb-2">{pest.crop}</p>
+                                <div className="flex flex-wrap gap-2">
+                                  {pest.symptoms.slice(0, 3).map((symptom, idx) => (
+                                    <Badge key={`${symptom}-${idx}`} className="bg-gray-100 text-gray-700 text-xs">
+                                      {symptom}
+                                    </Badge>
+                                  ))}
                                 </div>
                               </div>
-                              <Badge className={pest.severity === "High" ? "bg-red-100 text-red-700" : "bg-orange-100 text-orange-700"}>
-                                {pest.severity} Risk
-                              </Badge>
                             </div>
-                          </motion.div>
-                        </Link>
+                            <Badge className={pest.severity === "High" ? "bg-red-100 text-red-700" : "bg-orange-100 text-orange-700"}>
+                              {pest.severity} Risk
+                            </Badge>
+                          </div>
+                        </motion.div>
                       </motion.div>
                     ))
                   ) : (
@@ -716,37 +718,34 @@ const Identify = () => {
             >
               {filteredPests.map((pest, index) => (
                 <motion.div key={pest.id} variants={scaleIn}>
-                  <Link to={`/pests/${pest.id}`}>
-                    <motion.div
-                      whileHover={{ y: -5, scale: 1.01 }}
-                      className="bg-white rounded-2xl p-5 border border-gray-200 hover:border-[#B9F261] hover:shadow-lg transition-all"
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-start gap-4">
-                          <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${cropColors[pest.crop] || "from-gray-400 to-gray-500"} flex items-center justify-center`}>
-                            <Bug className="w-7 h-7 text-white" />
-                          </div>
-                          <div>
-                            <h3 className="font-display font-bold text-lg text-[#0B0B0B]">{pest.name}</h3>
-                            <p className="text-sm text-gray-500 mb-2">{t('identify.affects')}: {pest.crop}</p>
-                            <div className="flex flex-wrap gap-2">
-                              {pest.symptoms.map((symptom, idx) => (
-                                <Badge key={`${symptom}-${idx}`} className="bg-gray-100 text-gray-700 text-xs">
-                                  {symptom}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
+                  <motion.div
+                    whileHover={{ y: -5, scale: 1.01 }}
+                    className="bg-white rounded-2xl p-5 border border-gray-200 hover:border-[#B9F261] hover:shadow-lg transition-all"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-4">
+                        <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${cropColors[pest.crop] || "from-gray-400 to-gray-500"} flex items-center justify-center`}>
+                          <Bug className="w-7 h-7 text-white" />
                         </div>
-                        <div className="flex flex-col items-end gap-2">
-                          <Badge className={pest.severity === "High" ? "bg-red-100 text-red-700" : "bg-orange-100 text-orange-700"}>
-                            {pest.severity}
-                          </Badge>
-                          <ChevronRight className="w-5 h-5 text-gray-400" />
+                        <div>
+                          <h3 className="font-display font-bold text-lg text-[#0B0B0B]">{pest.name}</h3>
+                          <p className="text-sm text-gray-500 mb-2">{t('identify.affects')}: {pest.crop}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {pest.symptoms.map((symptom, idx) => (
+                              <Badge key={`${symptom}-${idx}`} className="bg-gray-100 text-gray-700 text-xs">
+                                {symptom}
+                              </Badge>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </motion.div>
-                  </Link>
+                      <div className="flex flex-col items-end gap-2">
+                        <Badge className={pest.severity === "High" ? "bg-red-100 text-red-700" : "bg-orange-100 text-orange-700"}>
+                          {pest.severity}
+                        </Badge>
+                      </div>
+                    </div>
+                  </motion.div>
                 </motion.div>
               ))}
             </motion.div>

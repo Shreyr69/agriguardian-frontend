@@ -123,10 +123,10 @@ const Chat = () => {
 
   useEffect(() => {
     const chatId = searchParams.get("id");
-    if (chatId && chatId !== currentConversationId) {
+    if (chatId && chatId !== currentConversationId && !isLoading) {
       loadConversation(chatId);
     }
-  }, [searchParams]);
+  }, [searchParams, currentConversationId, isLoading]);
 
   useEffect(() => {
     if (!openMenuId) return;
@@ -148,11 +148,13 @@ const Chat = () => {
     };
   }, [openMenuId]);
 
-  const loadConversations = async () => {
+  const loadConversations = async (skipLoadCurrent = false) => {
     setIsLoadingConversations(true);
     try {
       const data = await getUserConversations(20, 0);
       setConversations(data.conversations || []);
+
+      if (skipLoadCurrent) return;
 
       const chatId = searchParams.get("id");
       if (chatId) {
@@ -234,7 +236,7 @@ const Chat = () => {
           isHindi ? "फसल रोग के बारे में पूछें" : "Ask about crop diseases",
         ],
       }]);
-      await loadConversations();
+      await loadConversations(true);
     } catch (error) {
       setSendError("Failed to create conversation. Please try again.");
     } finally {
@@ -312,7 +314,7 @@ const Chat = () => {
           if (!currentConversationId) {
             setCurrentConversationId(convId);
             setSearchParams({ id: convId });
-            loadConversations();
+            loadConversations(true);
           }
         },
         (error: string) => {

@@ -55,14 +55,20 @@ interface SprayLogEntry {
   pesticide_name: string;
   dose: string | null;
   spray_date: string;
-  crop_id: string | null;
+  crop_id: string | { _id: string, name: string, name_hi?: string; id?: string } | null;
   notes: string | null;
 }
 
 interface Crop {
   id: string;
+  _id?: string;
   name: string;
 }
+
+const getLocalDateString = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
 
 const SprayLog = () => {
   const [logs, setLogs] = useState<SprayLogEntry[]>([]);
@@ -76,7 +82,7 @@ const SprayLog = () => {
     pesticide_name: "",
     crop_id: "",
     dose: "",
-    spray_date: new Date().toISOString().split('T')[0],
+    spray_date: getLocalDateString(),
     notes: ""
   });
   const { toast } = useToast();
@@ -136,9 +142,22 @@ const SprayLog = () => {
     }
   };
 
-  const getCropName = (cropId: string | null) => {
+  const getCropName = (cropId: any) => {
     if (!cropId) return "Unknown";
-    return crops.find(c => c.id === cropId)?.name || "Unknown";
+    
+    // If it's already a populated object from the backend
+    if (typeof cropId === 'object' && cropId !== null) {
+      if (cropId.name) return cropId.name;
+      // Use the inner ID to map it if name somehow missing
+      cropId = cropId._id || cropId.id;
+      if (!cropId) return "Unknown";
+    }
+
+    const targetId = cropId.toString();
+    return crops.find(c => 
+      (c.id && c.id.toString() === targetId) || 
+      (c._id && c._id.toString() === targetId)
+    )?.name || "Unknown";
   };
 
   const checkForWarnings = (currentLogId: string, pesticide: string, date: string): string | null => {
@@ -189,7 +208,7 @@ const SprayLog = () => {
       const data = await response.json();
       setLogs([data, ...logs]);
       toast({ title: "Log added!", description: "Your spray log has been recorded." });
-      setFormData({ pesticide_name: "", crop_id: "", dose: "", spray_date: new Date().toISOString().split('T')[0], notes: "" });
+      setFormData({ pesticide_name: "", crop_id: "", dose: "", spray_date: getLocalDateString(), notes: "" });
       setShowForm(false);
     } catch (error: any) {
       toast({ title: "Error adding log", description: error.message, variant: "destructive" });
@@ -430,7 +449,7 @@ const SprayLog = () => {
                     const dateStr = formatDateForCalendar(currentMonth.getFullYear(), currentMonth.getMonth(), day);
                     const dayLogs = getLogsForDate(dateStr);
                     const hasLogs = dayLogs.length > 0;
-                    const isToday = dateStr === new Date().toISOString().split('T')[0];
+                    const isToday = dateStr === getLocalDateString();
                     const isSelected = dateStr === selectedDate;
 
                     return (
@@ -544,7 +563,7 @@ const SprayLog = () => {
                             >
                               <option value="">Select crop</option>
                               {crops.map(crop => (
-                                <option key={crop.id} value={crop.id}>{crop.name}</option>
+                                <option key={crop.id || crop._id} value={crop.id || crop._id}>{crop.name}</option>
                               ))}
                             </select>
                           </div>

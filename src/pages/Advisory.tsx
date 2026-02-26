@@ -230,7 +230,7 @@ const Advisory = () => {
                                     </div>
                                     <div className="flex flex-wrap gap-2 mb-3">
                                         <Badge className="bg-[#0B0B0B] text-white px-3 py-1">
-                                            {Math.round(topPest.confidence)}% Confidence
+                                            {Math.round(topPest.confidence <= 1 ? topPest.confidence * 100 : topPest.confidence)}% Confidence
                                         </Badge>
                                         <Badge className={getSeverityColor(topPest.severity)}>
                                             {topPest.severity || "Moderate"} Severity
