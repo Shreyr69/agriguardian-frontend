@@ -409,37 +409,38 @@ const Community = () => {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 px-6 py-4"
+        className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 px-4 py-4 md:px-6"
       >
-        <div className="container mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link to="/dashboard">
+        <div className="container mx-auto flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 md:gap-4 min-w-0">
+            <Link to="/dashboard" className="flex-shrink-0">
               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <Button variant="ghost" size="icon" className="rounded-xl hover:bg-gray-100">
                   <ArrowLeft className="w-5 h-5 text-[#0B0B0B]" />
                 </Button>
               </motion.div>
             </Link>
-            <div>
-              <h1 className="font-display font-bold text-2xl text-[#0B0B0B]">{t('community.title')}</h1>
-              <p className="text-sm text-gray-500">Connect, share, and learn from fellow farmers</p>
+            <div className="min-w-0">
+              <h1 className="font-display font-bold text-lg md:text-2xl text-[#0B0B0B] truncate">{t('community.title')}</h1>
+              <p className="text-xs text-gray-500">Connect, share, and learn from fellow farmers</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <LanguageSwitcher />
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
                 onClick={() => setShowForm(true)}
-                className="gap-2 bg-[#B9F261] text-[#0B0B0B] hover:bg-[#a8e050] rounded-full font-semibold px-5"
+                className="gap-2 bg-[#B9F261] text-[#0B0B0B] hover:bg-[#a8e050] rounded-full font-semibold px-3 md:px-5"
               >
-                <Plus className="w-4 h-4" />{t('community.newPost')}
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">{t('community.newPost')}</span>
               </Button>
             </motion.div>
           </div>
         </div>
       </motion.header>
 
-      <main className="container mx-auto px-6 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-4 md:px-6 md:py-8 max-w-4xl">
         {/* Stats Cards */}
         <motion.div
           className="grid grid-cols-3 gap-4 mb-8"
@@ -537,7 +538,7 @@ const Community = () => {
                       rows={4}
                       className="rounded-xl border-gray-200 focus:border-[#B9F261]"
                     />
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-600 mb-1">Related Crop</label>
                         <select
@@ -668,7 +669,7 @@ const Community = () => {
                         </div>
 
                         {/* Post Content */}
-                        <div className="ml-16">
+                        <div className="ml-0 sm:ml-16">
                           <h3 className="font-bold text-lg text-[#0B0B0B] mb-2">{post.title}</h3>
                           {post.description && (
                             <p className="text-gray-600 mb-3 leading-relaxed">{post.description}</p>
@@ -739,7 +740,7 @@ const Community = () => {
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: 'auto' }}
                               exit={{ opacity: 0, height: 0 }}
-                              className="ml-16 mt-4 pt-4 border-t border-gray-100"
+                              className="ml-0 sm:ml-16 mt-4 pt-4 border-t border-gray-100"
                             >
                               <div className="flex gap-3">
                                 <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${getAvatarColor(user?.name || 'U')} flex items-center justify-center text-white font-bold text-sm flex-shrink-0`}>
@@ -776,7 +777,7 @@ const Community = () => {
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: 'auto' }}
                               exit={{ opacity: 0, height: 0 }}
-                              className="ml-16 mt-4 pt-4 border-t border-gray-100 space-y-3"
+                              className="ml-0 sm:ml-16 mt-4 pt-4 border-t border-gray-100 space-y-3"
                             >
                               {replies[post.id].map((reply, index) => {
                                 // Get user ID string for comparison

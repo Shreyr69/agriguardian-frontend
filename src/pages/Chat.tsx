@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   sendChatMessageStream,
   getUserConversations,
@@ -89,13 +90,14 @@ const quickActions = [
 
 const Chat = () => {
   const { t, i18n } = useTranslation();
+  const isMobile = useIsMobile();
   const [searchParams, setSearchParams] = useSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
   const [isLoadingConversations, setIsLoadingConversations] = useState(true);
   const [editingConversationId, setEditingConversationId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState("");
@@ -452,12 +454,22 @@ const Chat = () => {
 
   return (
     <div className="h-screen flex overflow-hidden bg-[#FAF4EA]">
+      {/* Mobile backdrop - closes sidebar when tapping outside */}
+      {showSidebar && isMobile && (
+        <div
+          className="fixed inset-0 bg-black/40 z-10"
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
+
       {/* Conversation Sidebar */}
       <motion.div
         initial={{ x: -300 }}
         animate={{ x: showSidebar ? 0 : -300 }}
         transition={{ duration: 0.3 }}
-        className={`${showSidebar ? "w-80" : "w-0"} bg-white border-r border-gray-200 flex flex-col overflow-hidden absolute md:relative z-20 h-full`}
+        className={`${
+          showSidebar ? "w-80" : "w-0"
+        } bg-white border-r border-gray-200 flex flex-col overflow-hidden absolute md:relative z-20 h-full`}
       >
         {/* Sidebar Header */}
         <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-[#B9F261]/20 to-[#FFD24A]/10">
@@ -514,6 +526,8 @@ const Chat = () => {
                     const target = e.target as HTMLElement;
                     if (target.closest(".menu-button") || target.closest(".menu-dropdown")) return;
                     loadConversation(conv.id);
+                    // Auto-close sidebar on mobile after selecting a conversation
+                    if (isMobile) setShowSidebar(false);
                   }}
                   className={`w-full text-left p-3 rounded-xl hover:bg-[#B9F261]/10 transition-all cursor-pointer ${currentConversationId === conv.id
                       ? "bg-[#B9F261]/20 border-2 border-[#B9F261]"
